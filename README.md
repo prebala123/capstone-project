@@ -61,7 +61,7 @@ The second project analyzes cells and nets in a given netlist for a chip to dete
 Go to `src/chips/` to find the code for the project and run these python files. Choose which model file is needed based on the type of chip and metric to predict over.
 
 Data Exploration <br>
-(1) `exploration.ipynb` shows various statistics for chips like layouts and cell distributions <br>
+(1) `exploration.ipynb` shows various statistics for chips like layouts and cell distributions. The plots are saved under `results/chips/` <br>
 
 Data Processing <br>
 (2) `partition.py` partitions the chip into smaller areas by separating highly connected areas <br>
