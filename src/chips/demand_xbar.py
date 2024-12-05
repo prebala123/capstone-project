@@ -124,11 +124,9 @@ for i in range(1, n_samples+1):
     node_features = features['node_features']
     edge_features = features['net_features']
     wire = features['demand']
-    # congestion = np.argmax(congestion, axis=1)
 
     node_features = torch.tensor(node_features, dtype=torch.float).to(device)
     edge_features = torch.tensor(edge_features, dtype=torch.float).to(device)
-    # congestion = torch.tensor(congestion, dtype=torch.float).to(device)
     wire = torch.tensor(wire, dtype=torch.float).to(device)
 
     num_nodes, num_node_features = node_features.shape
@@ -170,13 +168,9 @@ for epoch in range(epochs):
         # Forward pass
 
         output = model(node_features, edge_features, vn_features, super_vn_features, hypergraph)
-        # output = output[:,0]
-        # print(output)
         
-        # Dummy target for illustration (binary labels for each node: 0 for not congested, 1 for congested)
         target = congestion
         
-        # print(target)
         # Compute loss
         loss = criterion(output, target)
         
