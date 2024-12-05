@@ -7,6 +7,7 @@ Our capstone project involves learning about graph analysis methods and how they
 |
 └───data
 |   |   chips
+|   |   └───clean_data
 |   └───mta
 └───results
 |   |   chips
@@ -19,7 +20,7 @@ Our capstone project involves learning about graph analysis methods and how they
 ```
 
 # Prerequisites
-The dependencies are listed under requirements.txt and are all purely python based. To install them simply run
+The dependencies are listed under requirements.txt and are all purely python based. First create a virtual environment using version 3.8.8 of python. To install the dependencies run
 
 ```
 pip install -r requirements.txt
@@ -42,22 +43,38 @@ Then add the csv files to the `data/mta/` folder.
 
 ## Running
 
-Navigate to `src/mta/` to find the code for the project. The entire code is written inside the jupyter notebook called `mta.ipynb`. Run each code cell to get the results of the analysis.
+Navigate to `src/mta/` to find the code for the project. The entire code is written inside the jupyter notebook called `mta.ipynb`. Run each code cell to get the results of the analysis. The results are also in the folder called `results/mta/`.
+<br><br><br>
 
 # Chip Profiling
 
-This project analyzes cells and nets in a given netlist for a chip to determine areas of high congestion. We represent the chip as a hypergraph and use a message passing neural network with virtual nodes to create a model that we believe accurately predicts congestion. Our work is a reimplementation of this paper (https://arxiv.org/abs/2404.00477).
+The second project analyzes cells and nets in a given netlist for a chip to determine areas of high congestion. We represent the chip as a hypergraph and use a message passing neural network with virtual nodes to create a model that we believe accurately predicts congestion. Our work is a reimplementation of this paper (https://arxiv.org/abs/2404.00477). We test our models on both the superblue data from the paper and the xbar data from DigiC.
 
 ## Dataset
 
-Download the dataset from [here](https://zenodo.org/records/10795280?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6Ijk5NjM2MzZiLTg0ZmUtNDI2My04OTQ3LTljMjA5ZjA3N2Y1OSIsImRhdGEiOnt9LCJyYW5kb20iOiJlYzFmMGJlZTU3MzE1OWMzOTU2MWZkYTE3MzY5ZjRjOCJ9.WifQFExjW1CAW0ahf3e5Qr0OV9c2cw9_RUbOXUsvRbnKlkApNZwVCL_VPRJvAve0MJDC0DDOSx_RLiTvBimr0w). Extract all the files and create a folder called `2023-03-06_data`. 
+(1) Download the Superblue dataset from [here](https://zenodo.org/records/10795280?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6Ijk5NjM2MzZiLTg0ZmUtNDI2My04OTQ3LTljMjA5ZjA3N2Y1OSIsImRhdGEiOnt9LCJyYW5kb20iOiJlYzFmMGJlZTU3MzE1OWMzOTU2MWZkYTE3MzY5ZjRjOCJ9.WifQFExjW1CAW0ahf3e5Qr0OV9c2cw9_RUbOXUsvRbnKlkApNZwVCL_VPRJvAve0MJDC0DDOSx_RLiTvBimr0w). Extract all the files into a folder called `2023-03-06_data`. Then add this folder to `data/chips/`.
 
-Then add this folder to `data/chips/`.
+(2) Download the DigiC dataset from [here](https://drive.google.com/file/d/1Scq35gvCQvIMrmthGs7MUhc8c1VZ8ZwN/view). Extract the files into a folder called `NCSU-DigIC-GraphData-2023-07-25` and put it under `data/chips/`.
 
 ## Running
 
-Go to `src/chips/` to find the code for the project. Run the notebooks in this order.
+Go to `src/chips/` to find the code for the project and run these python files. Choose which model file is needed based on the type of chip and metric to predict over.
 
-(1) `load_data.ipynb` takes in the raw data and creates the bipartite graph representation <br>
-(2) `create_eigen.ipynb` computes eigenvectors to encode the spatial location of each cell <br>
-(3) `model.ipynb` takes features such as cell size and spatial location and outputs the predicted congestion, as well as model accuracy
+Data Exploration <br>
+(1) `exploration.ipynb` shows various statistics for chips like layouts and cell distributions <br>
+
+Data Processing <br>
+(2) `partition.py` partitions the chip into smaller areas by separating highly connected areas <br>
+(3) `create_features.py` creates all the features that will go into the model and saves them under `data/chips/clean_data/` <br>
+
+Model Training <br>
+(4) `congestion_superblue.py` trains a model on the superblue chips to classify each cell's congestion <br>
+(5) `congestion_xbar.py` trains a model on the xbar chips to classify each cell's congestion <br>
+(6) `demand_superblue.py` trains a model on the superblue chips to predict each cell's demand <br>
+(7) `demand_xbar.py` trains a model on the xbar chips to predict each cell's demand <br>
+(8) `hpwl_superblue.py` trains a model on the superblue chips to predict each net's wire length <br>
+(9) `hpwl_xbar.py` trains a model on the xbar chips to predict each net's wire length <br>
+
+Model Testing <br>
+(10) `test_superblue.ipynb` shows how to test the model performance on superblue chips <br>
+(11) `test_xbar.ipynb` shows how to test model performance on xbar chips <br>
